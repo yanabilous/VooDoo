@@ -66,7 +66,6 @@ function calculateTotalPrice() {
 }
 
 
-
 function updateTotalPrice() {
   const totalElement = document.querySelector(".total-price");
   totalElement.textContent = `${calculateTotalPrice()} KR.`;
@@ -82,6 +81,7 @@ function updateTotalPrice() {
 
   cartCountElement.textContent = totalQuantity;
 }
+
 function removeProductFromCart(productId) {
   const voodoo_cart_products = get_cart_products();
   const productIndex = voodoo_cart_products.findIndex(product => product.productId === productId);
@@ -135,10 +135,12 @@ function render_cart() {
   const cart = document.getElementById("cart");
   cart.innerHTML = "";
   for (const product of all_products) {
+
+    let imgSrc = product.productImg || "assets/noPhoto.jpg";
     const cartItemHTML = `
               <div id="cart-item-${product.productId}" class="modal-card flex flex-row mb-10 justify-between" data-product-id="${product.productId}">
               <div class="flex">
-                <img class="img-modal" src="${product.productImg}" alt="img-product" id="cartItemImg-${product.productId}">
+                <img class="img-modal" src="${imgSrc}" alt="img-product" id="cartItemImg-${product.productId}">
                 <div class="info mx-3.5">
                   <p class="product-name truncate-text-modal" id="cartItemName-${product.productId}">${product.productName}</p>
                   <p class="product-price"  id="cartItemPrice-${product.productId}">${product.productPrice}</p>
@@ -218,12 +220,12 @@ document.addEventListener("DOMContentLoaded", function () {
           const productId = productData.id;
           const productTitle = productData.title;
           const productPrice = productData.variants[0].price;
-          const productImageSrc = productData.images[0] ? productData.images[0].src : "";
-
+          let imgSrc = productData.images[0] ? productData.images[0].src : "" || "assets/noPhoto.jpg";
           return `
+
           <div id="product-card" class="product-card w-300" data-product-id="${productId}">
             <div class="product-photo img border-black border-2 border-solid  mb-3">
-              <img class="product-img m-0" src="${productImageSrc}" alt="${productTitle}">
+              <img class="product-img m-0 object-cover h-full" src="${imgSrc}" alt="${productTitle}">
             </div>
             <div class="product-info flex flex-row justify-between mb-3">
               <div>
@@ -355,7 +357,7 @@ function renderProductList(products) {
 
   const productsContainer = document.querySelector("#product-list");
   if (products.length > 0) {
-  const productHTMLArray = products.map(productData => {
+    const productHTMLArray = products.map(productData => {
       const productId = productData.id;
       const productTitle = productData.title;
       const productPrice = productData.variants[0].price;
